@@ -5,21 +5,25 @@ git clone https://github.com/fossbalaji/tamil-tts-web.git
 ## Enter into the working directory
 
 ```shell
-cd tamil_tts_web
+cd tamil-tts-web
 ```
-## Install the requirements
-```shell
-virtualenv envtts
-. venv/bin/activate
-pip intsall -r requirements.txt
-```
-
 ## Mysql is needed for this project to run
 ```shell
 sudo apt-get install mysql-server
+sudo apt-get install python3-dev libmysqlclient-dev python3-pip
 ```
 
-# Note: Change Enviroment variables to your mysql user name and password in `envsetup.sh` script
+## Install the requirements
+```shell
+virtualenv envtts
+. envtts/bin/activate
+pip intsall -r requirements.txt
+```
+### Note: if this fails, supporting library is missing, google the error msg to solve the issue
+
+
+
+## Note: Change Enviroment variables to your mysql user name and password in `envsetup.sh` script
 
 ## Run the envsetup file by
 ```shell
