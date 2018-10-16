@@ -12,7 +12,28 @@
 
 <div class="container">
     {% if user %}
-      <h4> Hi {{user.first_name}}</h4>
+      <h4> Hi, {{user.first_name}}</h4>
+      <p>Your Uploaded Files</p>
+      {% if files %}
+          <table class="table">
+            <thead>
+              <tr>
+                <th>File Name</th>
+                <th>Status</th>
+                <th>Uploaded on</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in files %}
+              <tr>
+                <td>{{ item.file_name }}</td>
+                <td>{{ item.status }}</td>
+                <td>{{ item.created_on }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      {% endif %}
     {% endif %}
 </div>
 {% endblock %}

@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout, login
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.decorators import login_required
-
+from ttsapp.models import Uploads, Userkeys
+from uuid import uuid4
 
 
 class SignupPageView(View):
@@ -143,6 +144,13 @@ class HomePageView(View):
         """
         template_name = 'home.html'
         context = {"home_page": "active"}
+        upobjs = Uploads.objects.filter(user=request.user, is_active=True).order_by('-created_on')
+        master_list = []
+        for i in upobjs:
+            status = "Under Process" if not i.is_processed else "Processed"
+            master_list.append({"file_name": i.file_name, "created_on": i.created_on.strftime("%d-%m-%Y"),
+                                "status": status})
+        context["files"] = master_list
         return render(request=request, template_name=template_name, context=context)
 
 
@@ -171,13 +179,60 @@ class Fileupload(View):
         context = {}
         print(request.FILES)
         if request.FILES['myfile']:
-            myfile = request.FILES['myfile']
-            fs = FileSystemStorage(location='uploads/')
-            filename = fs.save(myfile.name, myfile)
-            uploaded_file_url = fs.url(filename)
-            context ={"upload_page": "active", "messages": {"level": "success", "msg": "File Uploaded Successfully",
-                                                           "short": "Success! "}}
+            try:
+                myfile = request.FILES['myfile']
+                fs = FileSystemStorage(location='uploads/')
+                filename = fs.save(myfile.name, myfile)
+                uploaded_file_url = fs.url(filename)
+                # save file paths in uploads table
+                upobj = Uploads()
+                upobj.user = request.user
+                upobj.file_name = myfile.name
+                upobj.file_path = uploaded_file_url
+                upobj.save()
+                context = {"upload_page": "active", "messages": {"level": "success", "msg": "File Uploaded "
+                                                                                            "Successfully",
+                                                                                            "short": "Success! "}}
+            except Exception as e:
+                context = {"upload_page": "active", "messages": {"level": "danger", "msg": str(e),
+                                                                 "short": "Error! "}}
         else:
             context = {"upload_page": "active", "messages": {"level": "danger", "msg": "No files found",
                                                             "short": "Error! "}}
+        return render(request=request, template_name=template_name, context=context)
+
+
+class PreferenceView(View):
+    """
+        endpoint: /user/preferences/
+        purpose: handles user api keys generation and deactivation
+    """
+    def get(self, request):
+        template_name = 'preferences.html'
+        context = {"api_key": ""}
+        if request.user:
+            keyobj = Userkeys.objects.filter(user=request.user).first()
+            api_key = keyobj.api_key if keyobj else ""
+            context["api_key"] = api_key
+        return render(request=request, template_name=template_name, context=context)
+
+    def post(self, request):
+        template_name = 'preferences.html'
+        context = {}
+        if request.user:
+            keyobj = Userkeys.objects.create(user=request.user, api_key=str(uuid4()))
+            keyobj.save()
+            api_key = keyobj.api_key
+            context["api_key"] = api_key
+        return render(request=request, template_name=template_name, context=context)
+
+    def put(self, request):
+        template_name = 'preferences.html'
+        context = {}
+        if request.user:
+            keyobj = Userkeys.objects.filter(user=request.user).first()
+            keyobj.api_key = ""
+            keyobj.save()
+            api_key = ""
+            context["api_key"] = api_key
         return render(request=request, template_name=template_name, context=context)

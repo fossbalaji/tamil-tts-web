@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from ttsapp.views import SignupPageView, LoginPageView, AboutPageView, HomePageView, LogoutView, Fileupload
+from ttsapp.views import SignupPageView, LoginPageView, AboutPageView, HomePageView, LogoutView, Fileupload, \
+    PreferenceView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +26,5 @@ urlpatterns = [
     path('about/', AboutPageView.as_view(), name='about'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('upload/', Fileupload.as_view(), name='upload'),
+    path('preferences/', PreferenceView.as_view(), name='preferences'),
 ]

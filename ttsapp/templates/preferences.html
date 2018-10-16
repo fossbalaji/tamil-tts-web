@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ User Preferences
+{% endblock %}
+
+{% block navbar %}
+ {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if user %}
+      <h4> Hi {{user.first_name}}</h4>
+    {% endif %}
+        <div class="row centered-form">
+            {% if messages %}
+                        {% if messages.level == 'danger' %}
+                            <div class="alert alert-danger alert-dismissible">
+                                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>{{messages.short }}</strong>{{ messages.msg}}
+                            </div>
+                        {% endif %}
+                        {% if messages.level == 'success' %}
+                            <div class="alert alert-success  alert-dismissible">
+                                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>{{messages.short}}</strong>{{ messages.msg}}
+                            </div>
+                        {% endif %}
+            {% endif %}
+        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+        	<div class="panel panel-default">
+        		<div class="panel-heading">
+			    		<h3 class="panel-title">Your API Key</h3>
+			 			</div>
+			 			<div class="panel-body">
+			    		<form role="form" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            {% if api_key != "" %}
+                            <div class="form-group">
+
+			    				<input type="text" name="api_key" class="form-control input-sm" value={{ api_key }} readonly>
+
+			    			</div>
+
+                            {% else %}
+                            <div class="form-group">
+                              <input type="text" name="api_key" class="form-control input-sm" value="" placeholder="Click generate to create API key" readonly>
+                            </div>
+                            <input type="submit" value="Generate" class="btn btn-info btn-block">
+                            {% endif %}
+
+
+			    		</form>
+			    	</div>
+	    		</div>
+    		</div>
+    	</div>
+</div>
+{% endblock %}
