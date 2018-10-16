@@ -1,0 +1,31 @@
+<nav class="navbar navbar-default">
+    <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+            {% if user.is_authenticated %}
+                <li role="presentation" class="{{ home_page }}">
+                        <a href="{% url 'home' %}">Home</a>
+                </li>
+                <li role="presentation" class="{{ upload_page }}">
+                        <a href="{% url 'upload' %}">Files</a>
+                </li>
+                <li role="presentation" class="{{ about_page }}">
+                        <a href="{% url 'about' %}">About</a>
+                </li>
+                <li role="presentation">
+                    <a href="{% url 'logout' %}"> Logout</a>
+                 </li>
+            {% else %}
+                <li role="presentation" class="{{ signup_page }}">
+                    <a href="{% url 'signup' %}">Signup</a>
+                </li>
+                <li role="presentation"class="{{ login_page }}" >
+                    <a href="{% url 'login' %}">Login</a>
+                </li>
+                <li role="presentation" class="{{ about_page }}">
+                    <a href="{% url 'about' %}">About</a>
+                </li>
+            {% endif %}
+
+        </ul>
+    </div><!--/.nav-collapse -->
+</nav>

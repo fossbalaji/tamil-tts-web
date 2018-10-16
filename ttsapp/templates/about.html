@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  About
+{% endblock %}
+
+{% block navbar %}
+{% include 'navbar.html' %}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+  <h1>Tamil TTS</h1>
+  <p>This Web Application is used to convert Tamil text into Speech</p>
+  <blockquote>
+    <p>Many of us , want to convert tamil texts into speech. If you are looking for one then this web application is for you . Just follow the steps below</p>
+      <ul>
+          <li> Signup with your email</li>
+          <li> Login with your credentials</li>
+          <li>Upload the File which contains tamil texts</li>
+          <li>Once the conversion is done we will email you about that, then you can download converted file(.wap, .mp3)</li>
+      </ul>
+      <footer></footer>
+  </blockquote>
+</div>
+{% endblock %}

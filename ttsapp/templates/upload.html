@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ File Upload
+{% endblock %}
+
+{% block navbar %}
+ {% include 'navbar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if user %}
+      <h4> Hi {{user.first_name}}</h4>
+    {% endif %}
+        <div class="row centered-form">
+            {% if messages %}
+                        {% if messages.level == 'danger' %}
+                            <div class="alert alert-danger alert-dismissible">
+                                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>{{messages.short }}</strong>{{ messages.msg}}
+                            </div>
+                        {% endif %}
+                        {% if messages.level == 'success' %}
+                            <div class="alert alert-success  alert-dismissible">
+                                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>{{messages.short}}</strong>{{ messages.msg}}
+                            </div>
+                        {% endif %}
+            {% endif %}
+        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+        	<div class="panel panel-default">
+        		<div class="panel-heading">
+			    		<h3 class="panel-title">Please Select File to upload</h3>
+			 			</div>
+			 			<div class="panel-body">
+			    		<form role="form" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+			    			<div class="form-group">
+			    				<input type="file" name="myfile" class="form-control input-sm" placeholder="Select file" required>
+			    			</div>
+			    			<input type="submit" value="upload" class="btn btn-info btn-block">
+			    		</form>
+			    	</div>
+	    		</div>
+    		</div>
+    	</div>
+</div>
+{% endblock %}
