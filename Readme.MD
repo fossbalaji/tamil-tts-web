@@ -13,9 +13,19 @@ sudo apt-get install mysql-server
 sudo apt-get install python3-dev libmysqlclient-dev python3-pip
 ```
 
+## Install Rabbitmq
+```shell
+sudo apt-get update
+sudo apt-get install rabbitmq-server
+sudo systemctl start rabbitmq-server
+rabbitmq-plugins enable rabbitmq_management
+sudo systemctl restart rabbitmq-server
+```
+#### Note: if any error in installation, check [here](https://www.rabbitmq.com/install-debian.html#bintray-apt-repo-erlang)
+
 ## Install the requirements
 ```shell
-virtualenv envtts
+virtualenv -p python3 envtts
 . envtts/bin/activate
 pip intsall -r requirements.txt
 ```
@@ -37,6 +47,11 @@ mysql -u yourusername -p
 create database tamiltts
 ```
 
+## Run command line tool setup
+```shell
+./tamil-tts.sh --clean --setup
+```
+
 ## Finally migrate and run the server
 ```shell
 python manage.py migrate
@@ -45,3 +60,11 @@ python manage.py runserver
 
 ## Open this on your browser
 http://127.0.0.1:8000
+
+## open another tab
+```shell
+cd tamil-tts-web
+. envsetup.sh
+. envtts/bin/activate
+celery -A tamil_tts_web worker --loglevel=info
+```

@@ -6,6 +6,7 @@ from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.decorators import login_required
 from ttsapp.models import Uploads, Userkeys
 from uuid import uuid4
+from ttsapp.tasks import convert_file_to_mp3
 
 
 class SignupPageView(View):
@@ -193,6 +194,9 @@ class Fileupload(View):
                 upobj.file_name = myfile.name
                 upobj.file_path = uploaded_file_url
                 upobj.save()
+
+                # call celery task here
+                convert_file_to_mp3.delay(int(upobj.id))
                 context = {"upload_page": "active", "messages": {"level": "success", "msg": "File Uploaded "
                                                                                             "Successfully",
                                                                                             "short": "Success! "}}
