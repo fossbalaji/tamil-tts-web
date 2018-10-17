@@ -144,7 +144,10 @@ class HomePageView(View):
         """
         template_name = 'home.html'
         context = {"home_page": "active"}
-        upobjs = Uploads.objects.filter(user=request.user, is_active=True).order_by('-created_on')
+        if request.user and request.user.is_authenticated:
+            upobjs = Uploads.objects.filter(user=request.user, is_active=True).order_by('-created_on')
+        else:
+            upobjs = []
         master_list = []
         for i in upobjs:
             status = "Under Process" if not i.is_processed else "Processed"

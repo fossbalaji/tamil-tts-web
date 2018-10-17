@@ -37,7 +37,7 @@
 			    		<form role="form" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
 			    			<div class="form-group">
-			    				<input type="file" name="myfile" class="form-control input-sm" placeholder="Select file" required>
+			    				<input type="file" name="myfile" class="form-control input-sm" placeholder="Select file" accept=".txt" required>
 			    			</div>
 			    			<input type="submit" value="upload" class="btn btn-info btn-block">
 			    		</form>

@@ -18,6 +18,7 @@
           <table class="table">
             <thead>
               <tr>
+                <th>S.No</th>
                 <th>File Name</th>
                 <th>Status</th>
                 <th>Uploaded on</th>
@@ -26,6 +27,7 @@
             <tbody>
               {% for item in files %}
               <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ item.file_name }}</td>
                 <td>{{ item.status }}</td>
                 <td>{{ item.created_on }}</td>
