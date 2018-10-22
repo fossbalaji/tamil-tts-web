@@ -12,8 +12,7 @@ def convert_file_to_mp3(upload_id):
     try:
         upfileobj = Uploads.objects.get(id=upload_id)
         file_path = upfileobj.file_path
-        fname = file_path.split('/media/')[-1]
-        mycommand = "./tamil-tts.sh --run --gen-mp3 --source uploads/%s" % fname
+        mycommand = "./tamil-tts.sh --run --gen-mp3 --source %s" % file_path
         # os.system(mycommand)
         # print("command ran")
 
@@ -27,7 +26,7 @@ def convert_file_to_mp3(upload_id):
             # store result path
             upfileobj.modified_on = datetime.now()
             upfileobj.is_processed = True
-            upfileobj.output_file = '/media/%s.mp3' % fname
+            upfileobj.output_file = '/media/%s.mp3' % file_path.replace('.txt', '')
             # call email func and update the flag
             upfileobj.is_email_sent = True
             upfileobj.save()

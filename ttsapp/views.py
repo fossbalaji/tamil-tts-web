@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from ttsapp.models import Uploads, Userkeys
 from uuid import uuid4
 from ttsapp.tasks import convert_file_to_mp3
+from datetime import datetime
 
 
 class SignupPageView(View):
@@ -185,14 +186,17 @@ class Fileupload(View):
         if request.FILES['myfile']:
             try:
                 myfile = request.FILES['myfile']
-                fs = FileSystemStorage(location='uploads/')
+                file_path = 'uploads/' + '%s/%s' % (datetime.today().strftime("%Y/%m/%d"), str(request.user.id)
+)
+                fs = FileSystemStorage(location=file_path)
                 filename = fs.save(myfile.name, myfile)
                 uploaded_file_url = fs.url(filename)
                 # save file paths in uploads table
+                fname = uploaded_file_url.split('media')[-1]
                 upobj = Uploads()
                 upobj.user = request.user
                 upobj.file_name = myfile.name
-                upobj.file_path = uploaded_file_url
+                upobj.file_path = file_path + fname
                 upobj.save()
 
                 # call celery task here
