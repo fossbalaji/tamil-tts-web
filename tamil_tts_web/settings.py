@@ -72,6 +72,7 @@ WSGI_APPLICATION = 'tamil_tts_web.wsgi.application'
 
 LOGOUT_REDIRECT_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -151,3 +152,15 @@ STATIC_URL = '/static/'
 
 # settings for celery
 CELERY_BROKER_URL = 'amqp://localhost'
+
+# email settings
+FROM_EMAIL = os.environ.get('FROM_EMAIL', 'tamilttsweb@gmail.com')
+EMAIL_PASS = os.environ.get('EMAIL_PASS')
+MAIL_SERVER = 'smtp.gmail.com'
+print("***", EMAIL_PASS)
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = FROM_EMAIL
+EMAIL_HOST_PASSWORD = EMAIL_PASS
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = FROM_EMAIL

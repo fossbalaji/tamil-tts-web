@@ -38,8 +38,11 @@
                                 <div class="form-group">
                                     <input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password" required>
                                 </div>
-			    			<input type="submit" value="Login" class="btn btn-info btn-block">
+			    			<input type="submit" value="Login" class="btn btn-info btn-block"><br/>
 
+                            <div class="form-group">
+                                <a href="{% url 'password_reset' %}">Forgot password?</a>
+			    			</div>
 			    		</form>
 			    	</div>
 	    		</div>

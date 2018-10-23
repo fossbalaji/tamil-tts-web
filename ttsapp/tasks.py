@@ -2,7 +2,8 @@ from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from ttsapp.models import Uploads
 from datetime import datetime
-import os
+from ttsapp.utils import task_finished
+from django.contrib.auth.models import User
 import subprocess
 
 
@@ -26,9 +27,15 @@ def convert_file_to_mp3(upload_id):
             # store result path
             upfileobj.modified_on = datetime.now()
             upfileobj.is_processed = True
-            upfileobj.output_file = '/media/%s.mp3' % file_path.replace('.txt', '')
+            output_path = '/media/%s.mp3' % file_path.replace('.txt', '')
+            upfileobj.output_file = output_path
+
             # call email func and update the flag
-            upfileobj.is_email_sent = True
+            user = User.objects.get(id=upfileobj.user_id)
+            file_data = {"id": upfileobj.id, "file_name": upfileobj.file_name, "output_file": output_path,
+                         "user": {"email": user.email, "first_name": user.first_name}}
+            flag = task_finished(filedata=file_data)
+            upfileobj.is_email_sent = flag
             upfileobj.save()
 
     except Exception as e:

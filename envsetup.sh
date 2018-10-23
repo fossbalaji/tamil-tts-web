@@ -6,3 +6,5 @@ export DB_USER=root
 export DB_PASS=qMt\`6RepqQAt\(h\)e
 export APP_ENV=dev
 export TIME_ZONE=Asia/Kolkata
+export FROM_EMAIL=tamilttsweb@gmail.com
+export EMAIL_PASS=mypassword
