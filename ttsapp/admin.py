@@ -1,3 +1,6 @@
 from django.contrib import admin
+from ttsapp.models import Userkeys, Uploads
 
-# Register your models here.
+admin.site.register(Userkeys)
+
+admin.site.register(Uploads)
