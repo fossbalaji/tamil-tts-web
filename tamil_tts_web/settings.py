@@ -156,8 +156,7 @@ CELERY_BROKER_URL = 'amqp://localhost'
 # email settings
 FROM_EMAIL = os.environ.get('FROM_EMAIL', 'tamilttsweb@gmail.com')
 EMAIL_PASS = os.environ.get('EMAIL_PASS')
-MAIL_SERVER = 'smtp.gmail.com'
-print("***", EMAIL_PASS)
+
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = FROM_EMAIL
