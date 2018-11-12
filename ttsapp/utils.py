@@ -9,14 +9,14 @@ def task_finished(filedata):
         text = """
                 Hi $FIRST_NAME,
                     Your file has been successfully converted to mp3. Please login to your account and 
-                    download the file from your home page'
+                    download the file from your home page.
         """.replace('$FIRST_NAME', filedata.get('user', {}).get('first_name', ''))
         send_mail(
             subject,
             text,
             settings.FROM_EMAIL,
             [To],
-            fail_silently=False, html_message=True)
+            fail_silently=False)
         return True
     except Exception as e:
         print(str(e))
