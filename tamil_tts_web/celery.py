@@ -5,7 +5,7 @@ from celery import Celery
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tamil_tts_web.settings')
 
-app = Celery('tamiltts')
+app = Celery('tamil_tts_web')
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
