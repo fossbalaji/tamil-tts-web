@@ -152,6 +152,9 @@ STATIC_URL = '/static/'
 
 # settings for celery
 CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
 
 # email settings
 FROM_EMAIL = os.environ.get('FROM_EMAIL', 'tamilttsweb@gmail.com')
