@@ -27,7 +27,7 @@ def convert_file_to_mp3(upload_id):
             # store result path
             upfileobj.modified_on = datetime.now()
             upfileobj.is_processed = True
-            output_path = '/media/%s.mp3' % file_path.replace('.txt', '')
+            output_path = '/%s.mp3' % file_path.replace('.txt', '')
             upfileobj.output_file = output_path
 
             # call email func and update the flag

@@ -8,6 +8,8 @@ from ttsapp.models import Uploads, Userkeys
 from uuid import uuid4
 from ttsapp.tasks import convert_file_to_mp3
 from datetime import datetime
+from django.conf import settings
+
 
 
 class SignupPageView(View):
@@ -153,8 +155,9 @@ class HomePageView(View):
         master_list = []
         for i in upobjs:
             status = "Under Process" if not i.is_processed else "Processed"
+            d_link = None if not i.output_file else settings.SERVER_URL + i.output_file
             master_list.append({"file_name": i.file_name, "created_on": i.created_on.strftime("%d-%m-%Y"),
-                                "status": status})
+                                "status": status, "output_file": d_link})
         context["files"] = master_list
         return render(request=request, template_name=template_name, context=context)
 
