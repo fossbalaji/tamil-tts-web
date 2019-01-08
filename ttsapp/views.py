@@ -11,7 +11,6 @@ from datetime import datetime
 from django.conf import settings
 
 
-
 class SignupPageView(View):
     """
         endpoint: /signup
@@ -56,7 +55,7 @@ class SignupPageView(View):
             u.last_name = last_name
             u.set_password(password)
             u.save()
-            context = {"signup_page": "active", "message": {"level": "success", "short": "Success!",
+            context = {"signup_page": "active", "messages": {"level": "success", "short": "Success!",
                                                             "msg": "User Created Successfully"}}
             return render(request, template_name='signup.html', context=context)
 
@@ -204,9 +203,10 @@ class Fileupload(View):
 
                 # call celery task here
                 convert_file_to_mp3.delay(int(upobj.id))
-                context = {"upload_page": "active", "messages": {"level": "success", "msg": "File Uploaded "
-                                                                                            "Successfully",
-                                                                                            "short": "Success! "}}
+                return redirect('/')
+                # context = {"upload_page": "active", "messages": {"level": "success", "msg": "File Uploaded "
+                #                                                                             "Successfully",
+                #                                                                             "short": "Success! "}}
             except Exception as e:
                 context = {"upload_page": "active", "messages": {"level": "danger", "msg": str(e),
                                                                  "short": "Error! "}}
