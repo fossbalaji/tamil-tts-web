@@ -157,7 +157,7 @@ class HomePageView(View):
             status = "Under Process" if not i.is_processed else "Processed"
             d_link = None if not i.output_file else settings.SERVER_URL + i.output_file
             master_list.append({"file_name": i.file_name, "created_on": i.created_on.strftime("%d-%m-%Y"),
-                                "status": status, "output_file": d_link})
+                                "status": status, "output_file": d_link, "is_processed": i.is_processed})
         context["files"] = master_list
         return render(request=request, template_name=template_name, context=context)
 

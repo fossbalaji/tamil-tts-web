@@ -32,7 +32,11 @@
                 <td>{{ item.file_name }}</td>
                 <td>{{ item.status }}</td>
                 <td>{{ item.created_on }}</td>
-                <td><a href ='{{ item.output_file }}' target="_blank">Download</a></td>
+                {% if item.is_processed %}
+                     <td><a href ='{{ item.output_file }}' target="_blank">Download</a></td>
+                {% else %}
+                     <td><a href ='#' onclick="return false">{{ item.status }}</a></td>
+                {% endif %}
               </tr>
               {% endfor %}
             </tbody>
