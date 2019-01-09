@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.views import View
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout, login
@@ -9,6 +9,12 @@ from uuid import uuid4
 from ttsapp.tasks import convert_file_to_mp3
 from datetime import datetime
 from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from ttsapp.utils import account_activation_token
 
 
 class SignupPageView(View):
@@ -54,12 +60,47 @@ class SignupPageView(View):
             u.first_name = first_name
             u.last_name = last_name
             u.set_password(password)
+            u.is_active = False
             u.save()
-            context = {"signup_page": "active", "messages": {"level": "success", "short": "Success!",
-                                                            "msg": "User Created Successfully"}}
-            return render(request, template_name='signup.html', context=context)
 
+            #email part
+            mail_subject = 'Activate your user account.'
+            current_site = get_current_site(request)
+            message = render_to_string('acc_active_email.html', {
+                'user': u,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(u.pk)).decode(),
+                'token': account_activation_token.make_token(u),
+            })
+            to_email = email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+            return HttpResponse('Please confirm your email address to complete the registration')
         return
+
+
+class ActivateView(View):
+    """
+        This is an view for activating email link for view
+    """
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        if user is not None and account_activation_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+            login(request, user)
+            current_site = get_current_site(request)
+            url = "http://" + current_site.domain + "/login/"
+            msg = 'Thank you for your email confirmation. Now you can login your account <a href=%s >here</a>' % url
+            return HttpResponse(msg)
+        else:
+            return HttpResponse('Activation link is invalid!')
 
 
 class LoginPageView(View):
@@ -88,6 +129,10 @@ class LoginPageView(View):
         username = request.POST.get('email')
         password = request.POST.get('password')
         user = User.objects.filter(username=username).first()
+        if user is not None and not user.is_active:
+            context["messages"] = {"msg": "user account not activated yet", "level": "danger", "short": "Error! "}
+            return render(request=request, template_name=template_name, context=context)
+
         if user is not None:
             # A backend authenticated the credentials
             user = authenticate(username=username, password=password)

@@ -16,8 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from ttsapp.views import SignupPageView, LoginPageView, AboutPageView, HomePageView, LogoutView, Fileupload, \
-    PreferenceView
+    PreferenceView, ActivateView
 from django.contrib.auth import views as auth_views
+from django.conf.urls import url
 
 
 urlpatterns = [
@@ -34,4 +35,6 @@ urlpatterns = [
     re_path(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
             auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     re_path(r'^reset/done/$', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+            ActivateView.as_view(), name='activate'),
 ]
