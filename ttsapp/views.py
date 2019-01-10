@@ -77,7 +77,11 @@ class SignupPageView(View):
                 mail_subject, message, to=[to_email]
             )
             email.send()
-            return HttpResponse('Please confirm your email address to complete the registration')
+            context = {"signup_page": "active", "messages": {"level": "success", "short": "Success! ",
+                                                             "msg": "Please confirm your email address to "
+                                                                    "complete the registration"}}
+            return render(request, template_name='signup.html', context=context)
+
         return
 
 
@@ -130,7 +134,7 @@ class LoginPageView(View):
         password = request.POST.get('password')
         user = User.objects.filter(username=username).first()
         if user is not None and not user.is_active:
-            context["messages"] = {"msg": "user account not activated yet", "level": "danger", "short": "Error! "}
+            context["messages"] = {"msg": "Email Verification Pending", "level": "danger", "short": "Error! "}
             return render(request=request, template_name=template_name, context=context)
 
         if user is not None:
