@@ -8,3 +8,4 @@ export APP_ENV=dev
 export TIME_ZONE=Asia/Kolkata
 export FROM_EMAIL=tamilttsweb@gmail.com
 export EMAIL_PASS=mypassword
+export SERVER_URL=http://tts.kaniyam.com

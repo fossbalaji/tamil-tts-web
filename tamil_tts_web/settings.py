@@ -149,8 +149,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # settings for celery
 CELERY_BROKER_URL = 'amqp://localhost'
@@ -169,4 +168,4 @@ EMAIL_HOST_PASSWORD = EMAIL_PASS
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = FROM_EMAIL
 
-SERVER_URL = os.environ.get('SERVER_URL', 'http://ec2-54-218-86-158.us-west-2.compute.amazonaws.com')
+SERVER_URL = os.environ.get('SERVER_URL', 'http://tts.kaniyam.com')
