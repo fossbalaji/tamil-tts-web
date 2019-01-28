@@ -7,12 +7,33 @@ from django.contrib.auth.models import User
 import subprocess
 
 
+def cleanup_file(filepath):
+    try:
+        # Read in the file
+        with open(filepath, 'r') as file:
+            filedata = file.read()
+
+        # Replace the target string
+        replace_chars = ["`", "``", "‘", "“", "‘'", "“”", "—", "-", ";", ":", "|"]
+        for re_ch in replace_chars:
+            filedata = filedata.replace(re_ch, '')
+
+        # Write the file out again
+        with open(filepath, 'w') as file:
+            file.write(filedata)
+        return True, None
+    except Exception as e:
+        return False, str(e)
+
 
 @shared_task
 def convert_file_to_mp3(upload_id):
     try:
         upfileobj = Uploads.objects.get(id=upload_id)
         file_path = upfileobj.file_path
+        clean_check, err = cleanup_file(file_path)
+        if not clean_check:
+            upfileobj.reason = err
         mycommand = "./tamil-tts.sh --run --gen-mp3 --source %s" % file_path
         # os.system(mycommand)
         # print("command ran")
